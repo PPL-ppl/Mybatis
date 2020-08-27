@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * @author 19424
+ */
 @Data
 public class Classes {
     private long id;
