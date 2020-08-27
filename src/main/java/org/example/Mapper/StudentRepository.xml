@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.Resposty.StudentRepository">
+    <resultMap id="studentMap" type="org.example.Entiy.Student">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <association property="classes" javaType="org.example.Entiy.Classes">
+            <id column="cid" property="id"></id>
+            <result column="cname" property="name"></result>
+        </association>
+    </resultMap>
+    <select id="FindById" parameterType="long" resultMap="studentMap">/*按照学号查询学生 两张表信息*/
+        select s.id,s.name,c.id as cid,c.name as cname from student s,classes c where s.id=#{id} and s.cid=c.id;
+    </select>
+    <!--延迟加载写法  分成两次单表查询-->
+    <resultMap id="studentMapLazy" type="org.example.Entiy.Student">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <association property="classes" javaType="org.example.Entiy.Classes"
+                     select="org.example.Resposty.ClassesRepository.findByIdLazy" column="cid"></association>
+    </resultMap>
+    <select id="FindByIdLazy" parameterType="long" resultMap="studentMapLazy">
+        select * from student where id=#{id} ;
+    </select>
+
+</mapper>
